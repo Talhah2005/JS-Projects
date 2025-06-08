@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  
+  h1 {
+    background-color: #081b31;
+    color: #fff;
+    height: 5rem;
+    line-height: 5rem;
+  }
+  
+  .choice {
+    height: 165px;
+    width: 165px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .choice:hover {
+    cursor: pointer;
+    opacity: 0.95;
+    background-color: #081b31;
+  }
+  
+  img {
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .choices {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin-top: 5rem;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+  }
+  .score-board{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    gap: 3rem;
+  }
+  #user-sc, #comp-sc{
+    font-size: 4rem;
+  }
+  .msg-container{
+    margin-top: 4rem;
+  }
+.msg{
+    background-color: #081b31;
+    color: #fff;
+    font-size: 2rem;
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    margin: 1rem auto;
+    max-width: 90vw; /* Responsive width */
+    word-break: break-word; /* Prevent overflow */
+    box-sizing: border-box;
+}
+@media screen and (max-width: 900px) {
+    .choice {
+        height: 120px;
+        width: 120px;
+    }
+    .choice img {
+        height: 110px;
+        width: 110px;
+    }
+    .msg {
+        font-size: 1.5rem;
+        padding: 0.8rem 1.5rem;
+    }
+    .choices {
+        gap: 2rem;
+    }
+}
+
+@media screen and (max-width: 550px){
+    .choice{
+        height: 130px;
+        width: 130px;
+    }
+    .choice img{
+        height: 120px;
+        width: 120px;
+    }
+    .score-board{
+        font-size: 1.5rem;
+        gap: 2rem;
+    }
+    .h1{
+        font-size: 2rem;
+    }
+    .choices{
+        gap: 2rem;
+
+
+    }
+    .msg {
+        font-size: 1.1rem;
+        padding: 0.6rem 1rem;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .choice{
+        height: 100px;
+        width: 100px;
+    }
+    .choice img{
+        height: 90px;
+        width: 90px;
+    }
+    .score-board{
+      font-size: 1.2rem;
+      gap: 1rem;
+    }
+    h1{
+      font-size: 1.5rem;
+    }
+    .choices{
+        gap: 1rem;
+    }
+    .msg {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.5rem;
+    }
+  }
+@media screen and (max-width: 350px) {
+    .choice {
+        height: 60px;
+        width: 60px;
+    }
+    .choice img {
+        height: 50px;
+        width: 50px;
+    }
+    .msg {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.5rem;
+    }
+    .choices {
+        gap: 0.5rem;
+    }
+}
+
+
