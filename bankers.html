@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Banker's Algorithm | Deadlock Avoidance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="banker.css">
+</head>
+<body>
+  <nav>
+    <div class="logo">Banker's Algorithm</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#features">Features</a>
+      <a href="index.html#about">About Us</a>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </nav>
+
+  <div class="sidebar" id="sidebar">
+    <a href="index.html" onclick="closeSidebar()">Home</a>
+    <a href="index.html#features" onclick="closeSidebar()">Features</a>
+    <a href="index.html#about" onclick="closeSidebar()">About Us</a>
+  </div>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="container">
+    <div class="config-section">
+      <div class="input-group">
+        <div class="input-field">
+          <label>Number of Processes</label>
+          <input type="number" id="processes" min="1" value="5" />
+        </div>
+        <div class="input-field">
+          <label>Number of Resources</label>
+          <input type="number" id="resources" min="1" value="3" />
+        </div>
+      </div>
+      <div class="actions">
+        <button onclick="createMatrices()">Generate Matrices</button>
+        <button onclick="checkSafety()">Check System Safety</button>
+      </div>
+    </div>
+
+    <div class="matrix-container" id="matrixContainer"></div>
+    <div id="result"></div>
+  </div>
+
+  <footer>
+    <p>Banker's Algorithm - Deadlock Avoidance System</p>
+  </footer>
+
+  <script src="bankers.js"></script>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', closeSidebar);
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+    }
+    let processes, resources;
+
+function createMatrices() {
+  processes = parseInt(document.getElementById("processes").value);
+  resources = parseInt(document.getElementById("resources").value);
+  const container = document.getElementById("matrixContainer");
+  container.innerHTML = "";
+
+  const availableCard = createMatrixCard("Available Resources");
+  availableCard.appendChild(createResourcesGrid("available", resources));
+  container.appendChild(availableCard);
+
+  const maxCard = createMatrixCard("Maximum Matrix");
+  maxCard.appendChild(createProcessGrid("max", processes, resources));
+  container.appendChild(maxCard);
+
+  const allocCard = createMatrixCard("Allocation Matrix");
+  allocCard.appendChild(createProcessGrid("alloc", processes, resources));
+  container.appendChild(allocCard);
+}
+
+function createMatrixCard(title) {
+  const card = document.createElement("div");
+  card.className = "matrix-card";
+  const h3 = document.createElement("div");
+  h3.className = "matrix-title";
+  h3.textContent = title;
+  card.appendChild(h3);
+  return card;
+}
+
+function createResourcesGrid(prefix, count) {
+  const grid = document.createElement("div");
+  grid.className = "resources-grid";
+  for (let i = 0; i < count; i++) {
+    const item = document.createElement("div");
+    item.className = "resource-item";
+    item.innerHTML = `<label>R${i}</label><input type="number" min="0" id="${prefix}_${i}" value="0">`;
+    grid.appendChild(item);
+  }
+  return grid;
+}
+
+function createProcessGrid(prefix, rows, cols) {
+  const grid = document.createElement("div");
+  grid.className = "process-grid";
+  for (let i = 0; i < rows; i++) {
+    const card = document.createElement("div");
+    card.className = "process-card";
+    const header = document.createElement("div");
+    header.className = "process-header";
+    header.textContent = `Process P${i}`;
+    card.appendChild(header);
+    const innerGrid = createResourcesGrid(`${prefix}_${i}`, cols);
+    card.appendChild(innerGrid);
+    grid.appendChild(card);
+  }
+  return grid;
+}
+
+function checkSafety() {
+  const allInputs = document.querySelectorAll('input[type="number"]');
+  for (let input of allInputs) {
+    if (parseInt(input.value) < 0) {
+      alert("Please enter values 0 or greater only.");
+      input.value = 0;
+      return;
+    }
+  }
+
+  const available = Array.from(
+    { length: resources },
+    (_, i) =>
+      parseInt(document.getElementById(`available_${i}`).value) || 0
+  );
+  const max = Array.from({ length: processes }, (_, i) =>
+    Array.from(
+      { length: resources },
+      (_, j) =>
+        parseInt(document.getElementById(`max_${i}_${j}`).value) || 0
+    )
+  );
+  const alloc = Array.from({ length: processes }, (_, i) =>
+    Array.from(
+      { length: resources },
+      (_, j) =>
+        parseInt(document.getElementById(`alloc_${i}_${j}`).value) || 0
+    )
+  );
+  const need = max.map((row, i) =>
+    row.map((val, j) => val - alloc[i][j])
+  );
+  const work = [...available];
+  const finish = new Array(processes).fill(false);
+  const safeSequence = [];
+  let count = 0;
+
+  while (count < processes) {
+    let found = false;
+    for (let i = 0; i < processes; i++) {
+      if (!finish[i] && need[i].every((val, j) => val <= work[j])) {
+        for (let j = 0; j < resources; j++) {
+          work[j] += alloc[i][j];
+        }
+        safeSequence.push(`P${i}`);
+        finish[i] = true;
+        found = true;
+        count++;
+      }
+    }
+    if (!found) break;
+  }
+
+  const resultDiv = document.getElementById("result");
+  resultDiv.style.display = "block";
+  resultDiv.className =
+    count === processes ? "safe-state" : "unsafe-state";
+  resultDiv.innerHTML =
+    count === processes
+      ? `<strong>Safe State:</strong> ${safeSequence.join(" → ")}`
+      : `<strong>Unsafe State:</strong> No safe sequence possible.`;
+}
+  </script>
+</body>
+</html>
