@@ -175,10 +175,10 @@ for (let select of dropdowns) {
         options.innerText = code;
         options.value = code;
         
-        if (select.name === 'from' && code === "PKR") {
+        if (select.name === 'from' && code === "USD") {
             options.selected = true;
         }
-        if (select.name === 'to' && code === "JOD") {
+        if (select.name === 'to' && code === "PKR") {
             options.selected = true;
         }
         select.append(options);
