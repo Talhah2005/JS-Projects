@@ -1,7 +1,5 @@
 # JS-Projects
 
-Javascripts advance projects and Games
-
 ## Overview
 
 This repository contains a collection of advanced JavaScript projects and games intended to showcase different skills, techniques, and concepts in web development. Whether you're a beginner looking to learn through examples or an experienced developer searching for inspiration, you’ll find a variety of projects here.
